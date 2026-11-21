@@ -2,6 +2,7 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import links from "starlight-links-validator";
+import agents from "starlight-hypha-agents";
 import hypha from "starlight-theme-hypha";
 
 // litany's documentation site, published to GitHub Pages by
@@ -44,6 +45,10 @@ export default defineConfig({
           tabs: { "Start here": "rocket", Guides: "book-open", Reference: "library" },
           links: [{ label: "Hypha Stack", href: "https://hyphatech.io/stack", icon: "layers" }],
         }),
+        // Each page as Markdown and llms.txt, written into agents/
+        // by the build, for the hypha-litany package to install; the docs
+        // workflow holds it to the pages.
+        agents({ dir: "../agents" }),
         // The reference is odoc's, in public/, which the validator cannot see.
         links({ exclude: ["**/reference/litany/**"] }),
       ],

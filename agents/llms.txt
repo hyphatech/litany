@@ -1,0 +1,107 @@
+# litany
+
+> The linter for modern OCaml.
+
+## Start here
+
+- [Getting Started](pages/index.md): The linter for modern OCaml.
+
+## Guides
+
+- [Selecting rules](pages/guide/selecting-rules.md): Groups, stability, fix promises and the project rules.
+- [Configuration](pages/guide/configuration.md): The litany file: what runs, what each rule is told, and which reports are dropped by path.
+- [Suppression](pages/guide/suppression.md): Silencing one finding with a reason, and the audits that keep suppressions honest.
+- [Fixing](pages/guide/fixing.md): Safe and unsafe fixes, the checks on every write, and where --fix refuses.
+- [Build integration](pages/guide/build-integration.md): Findings in your editor through a dune rule, other build systems, the cache and the workers.
+- [CI](pages/guide/ci.md): litany on GitHub Actions, and the text, json and github formats.
+- [Writing a rule](pages/guide/writing-a-rule.md): A rule is one value in one file, a registry entry and a fixture.
+- [A custom binary](pages/guide/custom-binary.md): The rules extended with your own, by recompiling.
+
+## Reference
+
+- [Reference](pages/reference.md)
+- [Rules](pages/reference/rules.md): Every rule litany has.
+- [dead-code](pages/reference/rules/dead-code.md): exported value unreachable from any root
+- [disable-all-warnings](pages/reference/rules/disable-all-warnings.md): a warning attribute disables every warning
+- [eta-reducible-forwarding](pages/reference/rules/eta-reducible-forwarding.md): binding that only forwards its arguments
+- [ignored-result](pages/reference/rules/ignored-result.md): result or option value is discarded by a wildcard binding
+- [invalid-function-comparison](pages/reference/rules/invalid-function-comparison.md): structural comparison with a function operand
+- [invalid-hashtable-key](pages/reference/rules/invalid-hashtable-key.md): polymorphic Hashtbl operation on a value proved functional
+- [invalid-nan-comparison](pages/reference/rules/invalid-nan-comparison.md): comparison with nan is a compile-time constant
+- [manual-boolean-operator](pages/reference/rules/manual-boolean-operator.md): if with one boolean-literal branch spells an operator longhand
+- [manual-case-guard](pages/reference/rules/manual-case-guard.md): case body that is immediately an if-then-else
+- [manual-eta-lambda](pages/reference/rules/manual-eta-lambda.md): anonymous function that only forwards its parameters
+- [manual-format-quoting](pages/reference/rules/manual-format-quoting.md): format literal hand-quotes %s where %S quotes and escapes
+- [manual-list-exists](pages/reference/rules/manual-list-exists.md): recursive function that re-implements List.exists
+- [manual-list-filter-map](pages/reference/rules/manual-list-filter-map.md): recursive function that re-implements List.filter or filter_map
+- [manual-list-fold](pages/reference/rules/manual-list-fold.md): recursive function that re-implements a List fold
+- [manual-list-forall](pages/reference/rules/manual-list-forall.md): recursive function that re-implements List.for_all
+- [manual-list-map](pages/reference/rules/manual-list-map.md): recursive function that hand-rolls a list map
+- [manual-option-bind](pages/reference/rules/manual-option-bind.md): two-case option match that re-implements Option.bind
+- [manual-option-map](pages/reference/rules/manual-option-map.md): two-case match that unwraps, transforms, and rewraps an option
+- [manual-option-value](pages/reference/rules/manual-option-value.md): two-case match extracting an option's value over a trivial default
+- [manual-record-update](pages/reference/rules/manual-record-update.md): record rebuilt field by field from one base
+- [manual-result-bind](pages/reference/rules/manual-result-bind.md): two-case result match that re-implements Result.bind
+- [manual-result-map](pages/reference/rules/manual-result-map.md): two-case match that transforms one result arm and rebuilds the other
+- [manual-temp-dir](pages/reference/rules/manual-temp-dir.md): temp file removed and re-created as a directory
+- [manual-tuple-matching](pages/reference/rules/manual-tuple-matching.md): single irrefutable tuple case that could be a let binding
+- [missing-final-newline](pages/reference/rules/missing-final-newline.md): file does not end with a newline
+- [missing-printer](pages/reference/rules/missing-printer.md): comparable abstract type whose interface exposes no printer
+- [needless-and-binding](pages/reference/rules/needless-and-binding.md): let rec binding riding an and-chain it does not need
+- [needless-append-empty](pages/reference/rules/needless-append-empty.md): append or concatenation with the neutral element
+- [needless-fun-match](pages/reference/rules/needless-fun-match.md): fun-then-match over an otherwise unused final parameter
+- [needless-list-length](pages/reference/rules/needless-list-length.md): List.length compared with 0 or 1 to test emptiness
+- [needless-list-map-before-concat](pages/reference/rules/needless-list-map-before-concat.md): List.map feeding concatenation builds an intermediate list
+- [needless-mutually-recursive-types](pages/reference/rules/needless-mutually-recursive-types.md): and-chained type that is not mutually recursive with its group
+- [open-of-ordinary-module](pages/reference/rules/open-of-ordinary-module.md): an open of a module that is not made to be opened
+- [outdated-str-module](pages/reference/rules/outdated-str-module.md): reference into the outdated Str module
+- [quadratic-list-append](pages/reference/rules/quadratic-list-append.md): list append folded with the accumulator on the left
+- [quadratic-string-concat-chain](pages/reference/rules/quadratic-string-concat-chain.md): a chain of three or more (^) segments
+- [quadratic-string-concat-fold](pages/reference/rules/quadratic-string-concat-fold.md): string concatenation folded through (^)
+- [redundant-bind-return](pages/reference/rules/redundant-bind-return.md): bind into a bare return re-wraps the value unchanged
+- [redundant-boolean-comparison](pages/reference/rules/redundant-boolean-comparison.md): comparison with a boolean constant
+- [redundant-boolean-operator](pages/reference/rules/redundant-boolean-operator.md): boolean operator with a constant operand
+- [redundant-conversion-roundtrip](pages/reference/rules/redundant-conversion-roundtrip.md): conversion immediately undone by its inverse
+- [redundant-guard-true](pages/reference/rules/redundant-guard-true.md): when guard that is literally true or false
+- [redundant-if-bool](pages/reference/rules/redundant-if-bool.md): if whose both branches are boolean literals restates the condition
+- [redundant-list-roundtrip](pages/reference/rules/redundant-list-roundtrip.md): list converted to a sequence and immediately back
+- [redundant-match-bool](pages/reference/rules/redundant-match-bool.md): boolean match interrupting an if/else chain
+- [redundant-nested-if](pages/reference/rules/redundant-nested-if.md): else-less if directly nested in an else-less if
+- [redundant-not-not](pages/reference/rules/redundant-not-not.md): double boolean negation
+- [redundant-option-comparison](pages/reference/rules/redundant-option-comparison.md): comparison with None spells an Option predicate
+- [redundant-option-roundtrip](pages/reference/rules/redundant-option-roundtrip.md): option converted to a list only to take its head back
+- [redundant-return-bind](pages/reference/rules/redundant-return-bind.md): bind of a fresh return wraps a value only to unwrap it
+- [restricted-dependency](pages/reference/rules/restricted-dependency.md): reference to a dependency forbidden by workspace policy
+- [restricted-export-name](pages/reference/rules/restricted-export-name.md): exported name breaking the configured naming policy
+- [restricted-global-mutable-state](pages/reference/rules/restricted-global-mutable-state.md): toplevel mutable state in library code
+- [restricted-public-exception](pages/reference/rules/restricted-public-exception.md): exception declared in a public library interface
+- [suspicious-ambiguous-constructors](pages/reference/rules/suspicious-ambiguous-constructors.md): constructor that shadows a standard constructor
+- [suspicious-catch-all-handler](pages/reference/rules/suspicious-catch-all-handler.md): wildcard exception handler swallows every exception
+- [suspicious-duplicate-condition](pages/reference/rules/suspicious-duplicate-condition.md): else-if condition that duplicates the previous arm's
+- [suspicious-exit-in-library](pages/reference/rules/suspicious-exit-in-library.md): exit referenced in library code
+- [suspicious-failwith-in-library](pages/reference/rules/suspicious-failwith-in-library.md): failwith referenced in library code
+- [suspicious-file-exists-race](pages/reference/rules/suspicious-file-exists-race.md): exists check guarding a filesystem operation on the same path
+- [suspicious-general-float-equality](pages/reference/rules/suspicious-general-float-equality.md): bit-exact equality on floats
+- [suspicious-if-same-branches](pages/reference/rules/suspicious-if-same-branches.md): if whose two branches are written identically
+- [suspicious-ignored-partial-application](pages/reference/rules/suspicious-ignored-partial-application.md): ignore of a value that is still a function
+- [suspicious-literal-condition](pages/reference/rules/suspicious-literal-condition.md): if over a literal true or false condition
+- [suspicious-lost-backtrace](pages/reference/rules/suspicious-lost-backtrace.md): work between catching and re-raising can overwrite the backtrace
+- [suspicious-physical-equality](pages/reference/rules/suspicious-physical-equality.md): physical comparison with a non-immediate operand
+- [suspicious-polymorphic-compare-on-opaque](pages/reference/rules/suspicious-polymorphic-compare-on-opaque.md): polymorphic comparison of a Set, Map, or Hashtbl value
+- [suspicious-print-debugging](pages/reference/rules/suspicious-print-debugging.md): console printing entrypoint referenced in library code
+- [suspicious-rec-without-recursion](pages/reference/rules/suspicious-rec-without-recursion.md): let rec group that never recurses
+- [suspicious-sequence-ignored-value](pages/reference/rules/suspicious-sequence-ignored-value.md): pure projection discarded where the compiler cannot warn
+- [suspicious-str-formatter](pages/reference/rules/suspicious-str-formatter.md): reference to the process-global Format.str_formatter
+- [suspicious-swallowed-cancellation](pages/reference/rules/suspicious-swallowed-cancellation.md): total handler around eio code converts cancellation into a value
+- [suspicious-transposable-arguments](pages/reference/rules/suspicious-transposable-arguments.md): three adjacent same-typed unlabeled parameters
+- [suspicious-unused-module-binding](pages/reference/rules/suspicious-unused-module-binding.md): module binding the unit never uses and never exports
+- [suspicious-variant-arity-tuple](pages/reference/rules/suspicious-variant-arity-tuple.md): constructor whose one argument is a parenthesized tuple
+- [suspicious-wall-clock-elapsed](pages/reference/rules/suspicious-wall-clock-elapsed.md): duration computed from wall-clock reads
+- [trailing-whitespace](pages/reference/rules/trailing-whitespace.md): trailing spaces or tabs at end of line
+- [unsafe-obj-magic](pages/reference/rules/unsafe-obj-magic.md): use of Obj.magic
+- [unsafe-partial-stdlib](pages/reference/rules/unsafe-partial-stdlib.md): reference to a partial stdlib eliminator
+- [untyped-ignore](pages/reference/rules/untyped-ignore.md): ignore discards a value without naming its type
+- [untyped-wildcard-binding](pages/reference/rules/untyped-wildcard-binding.md): let _ discards a value without naming its type
+- [unused-export](pages/reference/rules/unused-export.md): exported value never used by another unit
+- [used-underscore-binding](pages/reference/rules/used-underscore-binding.md): underscore-prefixed binding is used
+- [wildcard-over-owned-variant](pages/reference/rules/wildcard-over-owned-variant.md): a wildcard arm in a match over a variant the code owns

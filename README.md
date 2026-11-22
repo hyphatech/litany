@@ -61,6 +61,19 @@ Warning 0 [suspicious-physical-equality]: physical comparison has a non-immediat
 since that judgement is yours. Next: [Getting started](https://hyphatech.github.io/litany/)
 and [all 84 rules](https://hyphatech.github.io/litany/reference/rules/).
 
+## With an agent
+
+hypha-litany installs its documentation at `$(opam var hypha-litany:doc)`:
+each page of the site as Markdown, every rule among them, and `llms.txt`,
+which lists them. Your agent reads it when told to, in a line in your
+project's `AGENTS.md`:
+
+```md
+Before configuring litany or acting on its findings, read
+`$(opam var hypha-litany:doc)/llms.txt` and the pages it lists for the parts
+you need, and use those parts rather than writing your own.
+```
+
 ## Contributing
 
 See [AGENTS.md](AGENTS.md).

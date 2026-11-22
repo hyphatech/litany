@@ -39,3 +39,13 @@
   (universe))
  (action
   (run %{bin:windtrap} coverage --min 89)))
+
+; The documentation for a user's agent, agents/, written from the site's pages
+; by `make docs`: installed whole, so $(opam var hypha-litany:doc) holds
+; llms.txt and each page.
+
+(install
+ (package hypha-litany)
+ (section doc)
+ (source_trees
+  (agents as .)))

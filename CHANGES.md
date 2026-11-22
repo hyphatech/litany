@@ -1,3 +1,8 @@
+## Unreleased
+
+- hypha-litany installs its documentation for agents: each page of the
+  site as Markdown, and `llms.txt`, in `$(opam var hypha-litany:doc)`.
+
 ## 1.2.2 (2026-11-10)
 
 - The package is now `hypha-litany`, so it can be published beside

@@ -31,6 +31,15 @@ hand. A page imports a whole program from `examples/`, built with the
 repository, and `test/cli/examples.t` lints `examples/inventory`; short
 snippets and console samples are inline, and nothing checks them.
 
+`agents/` is generated, never edited: starlight-hypha-agents writes it
+from the site's pages as `make docs` builds them -- llms.txt, the
+catalogue, and pages/, each page as Markdown -- and hypha-litany installs
+it as its documentation.
+A page changed is `make docs` run in the same commit. Why: a user's
+agent reads what the release installs, offline. Test: the docs workflow
+builds the pages on every pull request and fails if `agents/` then
+differs.
+
 ## What is Hypha's here
 
 - **It is a library of Hypha Stack like any other.** Its CI, its

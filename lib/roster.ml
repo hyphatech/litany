@@ -37,19 +37,21 @@ module Entry = struct
     cmt : string option;
     cmti : string option;
     preprocessed_source : string option;
+    parsed_source : string option;
     interface_source : string option;
     library : string option;
     visibility : visibility;
     kind : kind option;
   }
 
-  let v ~source ?cmt ?cmti ?preprocessed_source ?interface_source ?library
-      ?(visibility = Unknown) ?kind () =
+  let v ~source ?cmt ?cmti ?preprocessed_source ?parsed_source ?interface_source
+      ?library ?(visibility = Unknown) ?kind () =
     {
       source;
       cmt;
       cmti;
       preprocessed_source;
+      parsed_source;
       interface_source;
       library;
       visibility;
@@ -60,6 +62,7 @@ module Entry = struct
   let cmt e = e.cmt
   let cmti e = e.cmti
   let preprocessed_source e = e.preprocessed_source
+  let parsed_source e = e.parsed_source
   let interface_source e = e.interface_source
   let library e = e.library
   let visibility e = e.visibility
@@ -72,11 +75,11 @@ module Entry = struct
     in
     let str = Format.pp_print_string in
     Format.fprintf ppf
-      "@[<hv 2>entry %s@ cmt %a@ cmti %a@ preprocessed %a@ interface %a@ \
-       library %a@ visibility %a@ kind %a@]"
+      "@[<hv 2>entry %s@ cmt %a@ cmti %a@ preprocessed %a@ parsed %a@ \
+       interface %a@ library %a@ visibility %a@ kind %a@]"
       e.source (opt str) e.cmt (opt str) e.cmti (opt str) e.preprocessed_source
-      (opt str) e.interface_source (opt str) e.library pp_visibility
-      e.visibility (opt pp_kind) e.kind
+      (opt str) e.parsed_source (opt str) e.interface_source (opt str) e.library
+      pp_visibility e.visibility (opt pp_kind) e.kind
 
   (* Both metadata fields project rules need; see [project_capable]. *)
   let has_project_metadata e = Option.is_some e.library && Option.is_some e.kind

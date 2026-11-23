@@ -549,7 +549,8 @@ module Unit_file = struct
       (fun field ->
         let o, key, vo, value = unit_field field in
         match key with
-        | "source" | "cmt" | "cmti" | "pp-source" | "intf-source" | "library" ->
+        | "source" | "cmt" | "cmti" | "pp-source" | "parsed-source"
+        | "intf-source" | "library" ->
             store key o value
         | "public" -> (
             match value with
@@ -580,8 +581,8 @@ module Unit_file = struct
     in
     let kind = Option.bind (get "kind") Roster.kind_of_string in
     Roster.Entry.v ~source ?cmt ?cmti ?preprocessed_source:(get "pp-source")
-      ?interface_source:(get "intf-source") ?library:(get "library") ~visibility
-      ?kind ()
+      ?parsed_source:(get "parsed-source") ?interface_source:(get "intf-source")
+      ?library:(get "library") ~visibility ?kind ()
 
   let decode bytes =
     match
@@ -676,6 +677,7 @@ module Unit_file = struct
           Option.iter (add_field b "cmt") (E.cmt e);
           Option.iter (add_field b "cmti") (E.cmti e);
           Option.iter (add_field b "pp-source") (E.preprocessed_source e);
+          Option.iter (add_field b "parsed-source") (E.parsed_source e);
           Option.iter (add_field b "intf-source") (E.interface_source e);
           Option.iter (add_field b "library") (E.library e);
           (match E.visibility e with
@@ -1072,6 +1074,7 @@ module Dune = struct
               let candidates =
                 (dir // (leaf ^ ".pp.ml"))
                 :: (dir // (leaf ^ ".mlx.pp.ml"))
+                :: (dir // (leaf ^ ".mlx.ml"))
                 ::
                 (if compiled_by_melange then
                    let copies = dir // ".melange_src" in
@@ -1084,6 +1087,17 @@ module Dune = struct
                  else [])
               in
               List.find_opt exists candidates
+          in
+          (* mlx-pp writes its parse of the .mlx beside the copy the
+             compiler's input was made from, whether or not a ppx ran on it
+             after. *)
+          let parsed_source =
+            match preprocessed_source with
+            | Some pp when Filename.check_suffix source ".mlx" ->
+                let leaf = Filename.basename source in
+                let parsed = Filename.dirname pp // (leaf ^ ".ml") in
+                if exists parsed then Some parsed else None
+            | Some _ | None -> None
           in
           let library, visibility, kind =
             match stanza with
@@ -1107,7 +1121,7 @@ module Dune = struct
           in
           Some
             (Roster.Entry.v ~source ?cmt ?cmti ?preprocessed_source
-               ?interface_source ?library ~visibility ?kind ()))
+               ?parsed_source ?interface_source ?library ~visibility ?kind ()))
         units
     in
     let local_cmi_dirs =

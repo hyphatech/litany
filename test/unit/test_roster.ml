@@ -32,11 +32,14 @@ let entries =
       test "paths are kept verbatim" (fun () ->
           let e =
             Roster.Entry.v ~source:"lib/a.ml" ~cmt:"_build/x/a.cmt"
-              ~preprocessed_source:"_build/x/a.pp.ml" ()
+              ~preprocessed_source:"_build/x/a.pp.ml"
+              ~parsed_source:"_build/x/a.mlx.ml" ()
           in
           equal string "lib/a.ml" (Roster.Entry.source e);
           equal (option string) (Some "_build/x/a.pp.ml")
-            (Roster.Entry.preprocessed_source e));
+            (Roster.Entry.preprocessed_source e);
+          equal (option string) (Some "_build/x/a.mlx.ml")
+            (Roster.Entry.parsed_source e));
       test "metadata defaults to absent, visibility to Unknown" (fun () ->
           let e = Roster.Entry.v ~source:"a.ml" ~cmt:"a.cmt" () in
           equal (option string) None (Roster.Entry.library e);

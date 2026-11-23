@@ -306,10 +306,12 @@ val interface : t -> Typedtree.signature option
     witness). *)
 
 val parsetree : t -> Parsetree.structure option
-(** [parsetree u] is the engine's own pre-PPX parse of {!source}, or [None] when
-    the editable source does not parse as OCaml (cppo sources and kin — such
-    units run typed rules only, with a summary note that attribute rules and
-    attribute suppression are unavailable). Demand-gated and cached; the same
+(** [parsetree u] is the pre-PPX parse of {!source}, or [None] when there is
+    none (cppo sources and kin — such units run typed rules only, with a summary
+    note that attribute rules and attribute suppression are unavailable). It is
+    the engine's own parse of the source as OCaml, or, when the entry names a
+    {!Roster.Entry.parsed_source}, the AST read from that file: [None] when it
+    is unreadable or not this compiler's AST. Demand-gated and cached; the same
     parse serves attribute rules, suppression matching, and the emit contract's
     corroboration. *)
 

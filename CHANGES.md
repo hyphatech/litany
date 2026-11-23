@@ -1,3 +1,13 @@
+## 1.4.0 (2026-11-23)
+
+- An `.mlx` unit is parsed as mlx parsed it, from the AST its preprocessor
+  wrote, so attribute rules and `[@litany.allow]` work there. Any `.mlx` that
+  held an attribute was reported degraded ("editable source does not parse"),
+  since OCaml's own parser can't read JSX. A unit file names that AST in a
+  `parsed-source` field.
+- An `.mlx` in a native library with no ppx is linted; it was skipped as
+  missing its artifact.
+
 ## 1.3.0 (2026-11-22)
 
 - hypha-litany installs its documentation for agents: each page of the

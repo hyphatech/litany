@@ -1,0 +1,7 @@
+; A stand-in for mlx's preprocessor, so the mlx cram runs without mlx
+; installed: OCaml with one form the OCaml parser refuses, written out as
+; the marshalled AST mlx-pp hands dune. TEST-ONLY, never installed.
+
+(executable
+ (name mlx_pp)
+ (libraries compiler-libs.common))

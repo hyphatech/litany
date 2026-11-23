@@ -33,8 +33,8 @@
 
     {v
     (unit (source lib/foo.ml) (cmt _build/default/lib/.foo.objs/byte/foo.cmt)
-          (cmti ...) (pp-source ...) (intf-source lib/foo.mli) (library foo)
-          (public true) (kind lib))
+          (cmti ...) (pp-source ...) (parsed-source ...)
+          (intf-source lib/foo.mli) (library foo) (public true) (kind lib))
     v}
 
     Only [source] and one of [cmt]/[cmti] are required in a [unit] form; unknown

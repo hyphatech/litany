@@ -143,3 +143,10 @@
  (deps
   %{bin:litany}
   (source_tree %{project_root}/examples)))
+
+; An mlx unit read through its dialect's own parse: a nested project whose
+; mlx dialect runs the stand-in preprocessor in mlx_pp/.
+
+(cram
+ (applies_to mlx)
+ (deps %{bin:litany} mlx_pp/mlx_pp.exe))

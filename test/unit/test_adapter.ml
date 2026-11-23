@@ -223,6 +223,39 @@ let dune_tests =
           equal (option string)
             (Some "_build/default/web/.melange_src/app.mlx.pp.ml")
             (Roster.Entry.preprocessed_source (entry_for r "web/app.mlx")));
+      test "an mlx unit names mlx-pp's parse beside the copy" (fun () ->
+          let dir, write = craft () in
+          write "web/dune" "(library (name web) (modes melange))\n";
+          write "web/app.mlx" "";
+          write "_build/default/web/.web.objs/melange/web__App.cmt" "";
+          write "_build/default/web/.melange_src/app.mlx" "";
+          write "_build/default/web/.melange_src/app.mlx.ml" "";
+          write "_build/default/web/.melange_src/app.mlx.pp.ml" "";
+          let r = dune_roster dir in
+          equal (option string)
+            (Some "_build/default/web/.melange_src/app.mlx.ml")
+            (Roster.Entry.parsed_source (entry_for r "web/app.mlx")));
+      test "a native mlx unit with no ppx rides mlx-pp's parse" (fun () ->
+          let dir, write = craft () in
+          write "lib/dune" "(library (name inv))\n";
+          write "lib/view.mlx" "";
+          write "_build/default/lib/.inv.objs/byte/inv__View.cmt" "";
+          write "_build/default/lib/view.mlx.ml" "";
+          let r = dune_roster dir in
+          let e = entry_for r "lib/view.mlx" in
+          equal (option string) (Some "_build/default/lib/view.mlx.ml")
+            (Roster.Entry.preprocessed_source e);
+          equal (option string) (Some "_build/default/lib/view.mlx.ml")
+            (Roster.Entry.parsed_source e));
+      test "an OCaml unit names no parse" (fun () ->
+          let dir, write = craft () in
+          write "lib/dune" "(library (name inv))\n";
+          write "lib/store.ml" "";
+          write "_build/default/lib/.inv.objs/byte/inv__Store.cmt" "";
+          write "_build/default/lib/store.pp.ml" "";
+          let r = dune_roster dir in
+          equal (option string) None
+            (Roster.Entry.parsed_source (entry_for r "lib/store.ml")));
       test "a native unit beside a melange copy names none" (fun () ->
           let dir, write = craft () in
           write "web/dune" "(library (name web) (modes native melange))\n";

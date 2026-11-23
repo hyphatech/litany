@@ -84,9 +84,11 @@ The file is [canonical s-expressions](https://en.wikipedia.org/wiki/Canonical_S-
 2. `(complete false)`, when it isn't your whole project.
 3. `(cmi-dirs <dir>...)`, where to find the `.cmi` files of dependencies.
 4. One `(unit ...)` per unit, with fields in the order `source cmt cmti
-   pp-source library public kind`. `source` and one of `cmt` or `cmti` are
-   required; `pp-source` is the preprocessed file, where there is one; `public`
-   is `true` or `false`; `kind` is `lib`, `exe` or `test`.
+   pp-source parsed-source intf-source library public kind`. `source` and one
+   of `cmt` or `cmti` are required; `pp-source` is the preprocessed file, where
+   there is one; `parsed-source` is the AST a dialect's preprocessor wrote for
+   a source OCaml can't parse, such as an `.mlx`; `intf-source` is the unit's
+   `.mli`; `public` is `true` or `false`; `kind` is `lib`, `exe` or `test`.
 
 Anything else is refused. A wrong or stale entry costs a skip, never a finding.
 

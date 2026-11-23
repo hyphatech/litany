@@ -61,6 +61,7 @@ module Entry : sig
     ?cmt:string ->
     ?cmti:string ->
     ?preprocessed_source:string ->
+    ?parsed_source:string ->
     ?interface_source:string ->
     ?library:string ->
     ?visibility:visibility ->
@@ -79,6 +80,10 @@ module Entry : sig
       - [preprocessed_source]: the built preprocessed source ([<m>.pp.ml]) for
         units the compiler read from a built pp file — the anchor of the Derived
         witness. Defaults to none, meaning the unit is expected to join Direct.
+      - [parsed_source]: the editable source as its dialect's preprocessor
+        parsed it — the marshalled AST mlx-pp writes for an [.mlx], which the
+        OCaml parser cannot read. [Unit.parsetree] reads it in place of parsing
+        [source]. Defaults to none: [source] is OCaml.
       - [interface_source]: the unit's paired interface source ([.mli]) — the
         second editable file of a unit whose [source] is an implementation. Text
         rules ([Rule.source]) run over it too; nothing else reads it. Defaults
@@ -103,6 +108,10 @@ module Entry : sig
   val preprocessed_source : t -> string option
   (** [preprocessed_source e] is the built preprocessed source path, if the
       compiler read one. *)
+
+  val parsed_source : t -> string option
+  (** [parsed_source e] is the path of the AST the source's dialect parsed it
+      into, if named. *)
 
   val interface_source : t -> string option
   (** [interface_source e] is the paired interface source path ([.mli]), if the

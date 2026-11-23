@@ -368,6 +368,7 @@ type t = {
   kind : kind option;
   implementation : Typedtree.structure;
   cmti : string option;
+  parsed_source : string option;
   scope : Naming.Scope.t;
   intra : Shape.Uid.t -> Shape.Uid.t list;
   mutable interface : Typedtree.signature option demand;
@@ -455,6 +456,8 @@ let load ~resolver ~build_current entry =
                                   kind = Roster.Entry.kind entry;
                                   implementation;
                                   cmti = Roster.Entry.cmti entry;
+                                  parsed_source =
+                                    Roster.Entry.parsed_source entry;
                                   scope =
                                     Naming.Scope.v ~resolver ~intra
                                       ~local:implementation.Typedtree.str_type;
@@ -576,16 +579,35 @@ let interface u =
       u.interface <- Loaded v;
       v
 
+(* A dialect's preprocessor writes its parse as [Pparse.read_ast] reads it:
+   the magic, the name of the file it read, then the structure. Read by
+   hand, because [Pparse.read_ast] also sets [Location.input_name]. *)
+let read_parsed_source path =
+  let magic = Config.ast_impl_magic_number in
+  match
+    In_channel.with_open_bin path (fun ic ->
+        if String.equal (really_input_string ic (String.length magic)) magic
+        then
+          let (_ : string) = input_value ic in
+          Some (input_value ic : Parsetree.structure)
+        else None)
+  with
+  | tree -> tree
+  | exception (Sys_error _ | End_of_file | Failure _) -> None
+
 let parsetree u =
   match u.parsetree with
   | Loaded v -> v
   | Not_loaded ->
       let v =
-        let lexbuf = Lexing.from_string (Source.contents u.source) in
-        Lexing.set_filename lexbuf u.path;
-        match Parse.implementation lexbuf with
-        | tree -> Some tree
-        | exception (Syntaxerr.Error _ | Lexer.Error _) -> None
+        match u.parsed_source with
+        | Some path -> read_parsed_source path
+        | None -> (
+            let lexbuf = Lexing.from_string (Source.contents u.source) in
+            Lexing.set_filename lexbuf u.path;
+            match Parse.implementation lexbuf with
+            | tree -> Some tree
+            | exception (Syntaxerr.Error _ | Lexer.Error _) -> None)
       in
       u.parsetree <- Loaded v;
       v

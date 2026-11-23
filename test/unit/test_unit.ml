@@ -369,6 +369,41 @@ let substrate_tests =
           is_some (Unit.parsetree u);
           is_true ~msg:"same value on the second call"
             (Unit.parsetree u == Unit.parsetree u));
+      with_bytes "parsetree is the parsed source's AST when one is named"
+        (fun () ->
+          let path = Filename.temp_file "litany-test" ".mlx.ml" in
+          let ast =
+            Parse.implementation (Lexing.from_string "let a = 1\nlet b = 2")
+          in
+          Out_channel.with_open_bin path (fun oc ->
+              output_string oc Config.ast_impl_magic_number;
+              output_value oc "view.mlx";
+              output_value oc (ast : Parsetree.structure));
+          (path, ""))
+        (fun (path, _) ->
+          let u =
+            require_load
+              (Entry.v ~source:direct_source ~cmt:direct_cmt ~parsed_source:path
+                 ())
+          in
+          match Unit.parsetree u with
+          | None -> fail "expected the parsed source's AST"
+          | Some tree -> equal int 2 (List.length tree));
+      with_bytes "parsetree is None when the parsed source is no AST"
+        (crafted "let a = 1") (fun (path, _) ->
+          let u =
+            require_load
+              (Entry.v ~source:direct_source ~cmt:direct_cmt ~parsed_source:path
+                 ())
+          in
+          is_none (Unit.parsetree u));
+      test "parsetree is None when the parsed source is missing" (fun () ->
+          let u =
+            require_load
+              (Entry.v ~source:direct_source ~cmt:direct_cmt
+                 ~parsed_source:"fixtures/unit/plain/no-such.mlx.ml" ())
+          in
+          is_none (Unit.parsetree u));
     ]
 
 (* [bound_expr u name] is the expression bound to the top-level variable

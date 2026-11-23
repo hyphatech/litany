@@ -32,6 +32,7 @@ let entry_repr e =
     Entry.cmt e,
     Entry.cmti e,
     Entry.preprocessed_source e,
+    Entry.parsed_source e,
     Entry.interface_source e,
     Entry.library e,
     Entry.visibility e,
@@ -356,6 +357,7 @@ let gen_entry =
   and+ a = gen_path
   and+ b = gen_path
   and+ preprocessed_source = option gen_path
+  and+ parsed_source = option gen_path
   and+ interface_source = option gen_path
   and+ library = option gen_path
   and+ visibility = gen_vis
@@ -366,12 +368,13 @@ let gen_entry =
     | `Cmti -> (None, Some a)
     | `Both -> (Some a, Some b)
   in
-  Entry.v ~source ?cmt ?cmti ?preprocessed_source ?interface_source ?library
-    ~visibility ?kind ()
+  Entry.v ~source ?cmt ?cmti ?preprocessed_source ?parsed_source
+    ?interface_source ?library ~visibility ?kind ()
 
 let with_source source e =
   Entry.v ~source ?cmt:(Entry.cmt e) ?cmti:(Entry.cmti e)
     ?preprocessed_source:(Entry.preprocessed_source e)
+    ?parsed_source:(Entry.parsed_source e)
     ?interface_source:(Entry.interface_source e) ?library:(Entry.library e)
     ~visibility:(Entry.visibility e) ?kind:(Entry.kind e) ()
 
